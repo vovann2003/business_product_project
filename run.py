@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, flash, redirect, abort, request
+from flask import Flask, render_template, url_for, flash, redirect, abort, request, jsonify
 from datetime import datetime
 
 from flask_admin import Admin
@@ -61,7 +61,6 @@ class Invoice(db.Model):
     __tablename__ = 'invoice'
 
     id = Column(Integer, primary_key=True)
-    # type_id = Column(Integer, ForeignKey('invoice_type.id'))
     type_name = Column(String, ForeignKey('invoice_type.name'))
     type = db.relationship('InvoiceType', backref='type')
     product = Column(String(255))
@@ -146,8 +145,6 @@ def main():
             join(InvoiceType, Invoice.type_name == InvoiceType.name). \
             filter(InvoiceType.name == 'outcome'). \
             group_by(Company.name).all()
-        print(income_invoices_by_company)
-        print(income_invoices_by_company)
 
     companies = Company.query.all()
     products = ProductStock.query.all()
@@ -209,7 +206,7 @@ def edit_company(company_id: int):
     return render_template('edit_company.html', company=company, form=form)
 
 
-@app.route('/delete/company/<int:company_id>')
+@app.route('/delete/company/<int:company_id>', methods=["GET", "POST"])
 def delete_company(company_id: int):
     """
     This endpoint delete company by id
@@ -222,14 +219,11 @@ def delete_company(company_id: int):
         db.session.commit()
 
         flash('Company has been successfully deleted')
-        # return redirect(url_for('main'))
+        return redirect(url_for('main'))
 
-    except:
-        error = True
-        flash('Ooopps...Something goes wrong')
-        # return render_template('posts.html', error=error)
-    finally:
-        redirect(url_for('main'))
+    except ValueError as e:
+        # Return a 404 error with the exception message
+        return jsonify({'error': str(e)}), 404
 
 
 @app.route('/product/add', methods=["GET", "POST"])
@@ -287,27 +281,23 @@ def edit_product(product_id: int):
     return render_template('edit_product.html', form=form, product=product)
 
 
-@app.route('/delete/product/<int:product_id>')
+@app.route('/delete/product/<int:product_id>', methods=["GET", "POST"])
 def delete_product(product_id: int):
     """
     This endpoint delete product by id
     """
-    post = ProductStock.query.get_or_404(product_id)
-    # error = None
-
     try:
-        db.session.delete(post)
+        product = ProductStock.query.get_or_404(product_id)
+
+        db.session.delete(product)
         db.session.commit()
 
         flash('Product has been successfully deleted')
-        # return redirect(url_for('main'))
+        return render_template('main.html')
 
-    except:
-        error = True
-        flash('Ooopps...Something goes wrong')
-        # return render_template('posts.html', error=error)
-    finally:
-        redirect(url_for('main'))
+    except ValueError as e:
+        # Return a 404 error with the exception message
+        return jsonify({'error': str(e)}), 404
 
 
 @app.route('/product/<int:product_id>')
@@ -438,7 +428,7 @@ admin.add_view(CompanyModelView(Company, db.session))
 admin.add_view(ProductModelView(ProductStock, db.session))
 
 
-# Create dd
+# Create db
 def create_db_if_not_exists():
     with app.app_context():
         if not db.engine.has_table(Company.__tablename__) or not db.engine.has_table(ProductStock.__tablename__) or not db.engine.has_table(InvoiceType.__tablename__) or not db.engine.has_table(Invoice.__tablename__):
