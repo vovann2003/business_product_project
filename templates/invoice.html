@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Invoice
+{% endblock %}
+
+{% block content %}
+    <div class="card text-bg-light mb-3" style="max-width: 18rem;">
+      <div class="card-header">{{ invoice.type.name }}</div>
+      <div class="card-body">
+          <h5 class="card-title">{{ invoice.product}}</h5>
+          <h5 class="card-title">Product count: {{ invoice.product_count }}</h5>
+          <p class="card-text">Total price: {{ invoice.total }}</p>
+          <p class="card-text">Company: {{ invoice.company.name }}</p>
+          <a href="{{ url_for('get_invoices') }}" class="btn btn-outline-secondary">Back</a>
+          <a href="#" class="btn btn-outline-danger">Delete invoice</a>
+          <a href="#" class="btn btn-outline-secondary">Edit</a>
+      </div>
+    </div>
+{% endblock %}

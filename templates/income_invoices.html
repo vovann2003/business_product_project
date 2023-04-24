@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Income invoices
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="content-paragraph">Income invoices list:</h2>
+    {% if income %}
+            <table class="table">
+                <thead class="table-dark">
+                    <td>#</td>
+                    <td>Type</td>
+                    <td>Product Count</td>
+                    <td>Total</td>
+                    <td>Company</td>
+                </thead>
+                <tbody>
+                {% for invoice in income %}
+                    <td>{{ invoice.id }}</td>
+                    <td>{{ invoice.type.name }}</td>
+                    <td>{{ invoice.product_count }}</td>
+                    <td>{{ invoice.total }}</td>
+                    <td>{{ invoice.company.name }}</td>
+                </tbody>
+                {% endfor %}
+            </table>
+    {% else %}
+        <h3>The list of income invoices is empty</h3>
+    {% endif %}
+</div>
+{% endblock %}

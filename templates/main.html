@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Main
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Enter a Time Period For Getting Invoices</h2>
+    <form method="POST">
+        <label for="date_from" class="form-label">Date From:</label>
+        <input type="date" name="date_from" id="date_from" class="form_user_input"><br>
+        <label for="date_to" class="form-label">Date To:</label>
+        <input type="date" name="date_to" id="date_to" class="form_user_input"><br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% if invoices %}
+    {% if income_invoices_by_company %}
+        <h2 class="content-paragraph">Income invoices at time period:</h2>
+        <table class="table">
+            <thead class="table-dark">
+                <td>Company Name</td>
+                <td>Total Price</td>
+                <td>Count of Income Products</td>
+            </thead>
+            <tbody>
+            {% for invoice in income_invoices_by_company %}
+                <td>{{ invoice[0] }}</td>
+                <td>{{ invoice[1] }}</td>
+                <td>{{ invoice[2] }}</td>
+            </tbody>
+        {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if outcome_invoices_by_company %}
+        <h2 class="content-paragraph">Outcome invoices at time period:</h2>
+        <table class="table">
+            <thead class="table-dark">
+                <td>Company Name</td>
+                <td>Total Price</td>
+                <td>Count of Sold Products</td>
+            </thead>
+            <tbody>
+            {% for invoice in outcome_invoices_by_company %}
+                <td>{{ invoice[0] }}</td>
+                <td>{{ invoice[1] }}</td>
+                <td>{{ invoice[2] }}</td>
+            </tbody>
+        {% endfor %}
+        </table>
+    {% endif %}
+
+        <h2 class="content-paragraph">Invoices at time period:</h2>
+        {% if companies %}
+            <table class="table">
+                <thead class="table-dark">
+                    <td>#</td>
+                    <td>Type</td>
+                    <td>Product Count</td>
+                    <td>Total</td>
+                    <td>Company</td>
+                    <td>Date add</td>
+                </thead>
+                <tbody>
+                {% for invoice in invoices %}
+                    <td>{{ invoice.id }}</td>
+                    <td>{{ invoice.type.name }}</td>
+                    <td>{{ invoice.product_count }}</td>
+                    <td>{{ invoice.total }}</td>
+                    <td>{{ invoice.company.name }}</td>
+                    <td>{{ invoice.date }}</td>
+                </tbody>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h3>The list of companies is empty</h3>
+        {% endif %}
+    {% endif %}
+
+    <h2 class="content-paragraph">Companies list:</h2>
+    {% if companies %}
+            <table class="table">
+                <thead class="table-dark">
+                    <td>#</td>
+                    <td>Name</td>
+                </thead>
+                <tbody>
+                {% for company in companies %}
+                    <td><a href="{{ url_for('get_company', company_id=company.id) }}">{{ company.id }}</a></td>
+                    <td>{{ company.name }}</td>
+                </tbody>
+                {% endfor %}
+            </table>
+    {% else %}
+        <h3>The list of companies is empty</h3>
+    {% endif %}
+
+    <h2 class="content-paragraph">Products list:</h2>
+    {% if products %}
+            <table class="table">
+                <thead class="table-dark">
+                    <td>#</td>
+                    <td>Name</td>
+                    <td>Price</td>
+                    <td>Company</td>
+                    <td>Count</td>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <td><a href="{{ url_for('edit_product', product_id=product.id)  }}">{{ product.id }}</a></td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.company.name }}</td>
+                    <td>{{ product.product_count }}</td>
+                </tbody>
+                {% endfor %}
+            </table>
+    {% else %}
+        <h3>The list of products is empty</h3>
+    {% endif %}
+</div>
+{% endblock %}

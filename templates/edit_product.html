@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+    <div class="mb-3">
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class='form_user_input', value=product.name) }}
+    </div>
+    <div class="mb-3">
+        {{ form.price.label(class="form-label") }}
+        {{ form.price(class='form_user_input', value=product.price) }}
+    </div>
+    <div class="mb-3">
+        {{ form.product_count.label(class="form-label") }}
+        {{ form.product_count(class='form_user_input', value=product.product_count) }}
+    </div>
+    <div class="mb-3">
+        {{ form.company_id.label(class="form-label") }}
+        {{ form.company_id(class='form_user_input', value=product.company.name) }}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="{{ url_for('get_product_by_id', product_id=product.id) }}" class="btn btn-outline-secondary">Back</a>
+</form>
+{% endblock %}

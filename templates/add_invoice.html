@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Add invoice
+{% endblock %}
+
+{% block form %}
+    <form action="" method="post">
+        <div class="mb-3">
+            {{ form.type.label(class="form-label") }}
+            {{ form.type(class='form_user_input', value='type') }}
+        </div>
+        <div class="mb-3">
+            {{ form.product_name.label(class="form-label") }}
+            {{ form.product_name(class='form_user_input') }}
+        </div>
+        <div class="mb-3">
+            <label for="date_from" class="form-label">Date:</label>
+            <input type="date" name="date_from" id="date_from" class="form_user_input">
+        </div>
+        <div class="mb-3">
+            {{ form.product_count.label(class="form-label") }}
+            {{ form.product_count(class='form_user_input') }}
+        </div>
+        <div class="mb-3">
+            {{ form.total.label(class="form-label") }}
+            {{ form.total(class='form_user_input') }}
+        </div>
+        <div class="mb-3">
+            {{ form.company_id.label(class="form-label") }}
+            {{ form.company_id(class='form_user_input') }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

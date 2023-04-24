@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Add a company
+{% endblock %}
+
+{% block form %}
+    <form class="my-form" method="post">
+    <div class="mb-3">
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class='form_user_input') }}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
+
